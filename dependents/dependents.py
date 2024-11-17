@@ -11,7 +11,7 @@ FEATURES
 * Scrape all repositories that depend on a specific GitHub repository
 * List all available packages in a repository
 * Search for dependents of specific packages
-* Generate detailed reports in multiple formats (TXT, JSON, CSV)
+* Generate detailed reports in multiple formats (can be TXT, JSON, CSV)
 * Support for authentication using GitHub tokens
 * Rate limiting and retry mechanisms to handle API restrictions
 * Concurrent processing for faster results
@@ -272,34 +272,24 @@ def list_package_ids(config: ScraperConfig) -> Dict[str, str]:
         return {}
 
 def create_repo_output_dir(config: ScraperConfig) -> str:
-    """Create and return the path to the repository-specific output directory.
-
-    Args:
-        config (ScraperConfig): Configuration object containing repository information
-
-    Returns:
-        str: Path to the repository-specific output directory
-    """
-    # Create base output directory
-    base_output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "output")
+    """Create and return the path to the repository-specific output directory."""
+    # Get the absolute path of the script's directory and go up to root
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(os.path.dirname(script_dir))
+    base_output_dir = os.path.join(root_dir, "output")
     os.makedirs(base_output_dir, exist_ok=True)
     
-    # Create repository-specific directory
-    repo_name = config.repo.split('/')[-1]
+    # Create repository-specific directory with "-dependents" suffix
+    repo_name = f"{config.repo.split('/')[-1]}-dependents"
     repo_output_dir = os.path.join(base_output_dir, repo_name)
     os.makedirs(repo_output_dir, exist_ok=True)
     
     return repo_output_dir
 
 def save_packages_markdown(packages: Dict[str, str], config: ScraperConfig):
-    """Save the list of packages to a markdown file.
-
-    Args:
-        packages (Dict[str, str]): Dictionary mapping package names to their IDs
-        config (ScraperConfig): Configuration object containing repository information
-    """
-    # Create single output directory for the repository
-    repo_name = config.repo.split('/')[-1]
+    """Save the list of packages to a markdown file."""
+    # Create single output directory for the repository with "-dependents" suffix
+    repo_name = f"{config.repo.split('/')[-1]}-dependents"
     output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "output", repo_name)
     os.makedirs(output_dir, exist_ok=True)
     
@@ -315,7 +305,7 @@ def save_packages_markdown(packages: Dict[str, str], config: ScraperConfig):
 
 def search_package_dependents_chain(config: ScraperConfig) -> Dict[str, List[str]]:
     """Search for all packages in a repo and their dependent repositories."""
-    repo_name = config.repo.split('/')[-1]
+    repo_name = f"{config.repo.split('/')[-1]}-dependents"
     output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "output", repo_name)
     os.makedirs(output_dir, exist_ok=True)
     

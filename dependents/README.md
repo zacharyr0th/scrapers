@@ -7,7 +7,7 @@ A Python tool for scraping GitHub repository dependencies and generating compreh
 - Scrape repositories that depend on a GitHub repository
 - List all packages used in a repository 
 - Find dependents of specific packages
-- Generate reports in multiple formats (TXT, JSON, CSV)
+- Generate reports in multiple formats (can be TXT, JSON, CSV)
 - GitHub token authentication
 - Rate limiting and retry logic
 - Concurrent processing for performance

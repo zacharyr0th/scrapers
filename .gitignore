@@ -39,3 +39,7 @@ Thumbs.db
 output/
 visualizations/
 *.log
+
+# Environment variables
+.env
+.gitignore

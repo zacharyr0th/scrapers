@@ -253,7 +253,9 @@ def generate_yields_visualizations(yields_data, viz_dir, current_date):
 def generate_visualizations(protocols, dex_data, yields_data, output_dir):
     """Generate comprehensive visualizations from DeFi Llama data."""
     try:
-        viz_dir = os.path.join(output_dir, "visualizations")
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(os.path.dirname(script_dir))
+        viz_dir = os.path.join(root_dir, "output", output_dir, "visualizations")
         os.makedirs(viz_dir, exist_ok=True)
         current_date = datetime.now().strftime('%Y-%m-%d')
         logger.info(f"Saving visualizations to: {viz_dir}")
